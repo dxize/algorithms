@@ -1,0 +1,12 @@
+[Project]
+FileName=C:\FPC\3.2.2\bin\i386-win32\LABI(AASD)\lw1(AASD).dp
+Name=lw1(AASD)
+MainUnit=C:\FPC\3.2.2\bin\i386-win32\LABI(AASD)\lw1(AASD).pas
+UnitCount=1
+ResFiles=
+NoConsole=0
+IsDll=0
+Icon=C:\dev_gpc\Icon\Mainicon.ico
+[Unit1]
+FileName=C:\FPC\3.2.2\bin\i386-win32\LABI(AASD)\lw1(AASD).pas
+FileTime=1496354816

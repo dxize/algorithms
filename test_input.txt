@@ -1,0 +1,9 @@
+
+Это обычный текст, а это "специальный" термин.
+Здесь ещё один "термин" для тестирования.
+Файл должен корректно "пЁреписаться".
+
+
+This is a normal text, and this is a "special" term.
+Here is another "term" for testing.
+The file should be "rewritten" correctly.
