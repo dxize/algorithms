@@ -1,4 +1,1 @@
-﻿  lw4.cpp
-C:\FPC\3.2.2\bin\i386-win32\LABS_AASD\lw4.cpp(77,16): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
-C:\FPC\3.2.2\bin\i386-win32\LABS_AASD\lw4.cpp(95,16): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
-  LABS(AASD).vcxproj -> C:\FPC\3.2.2\bin\i386-win32\LABS_AASD\x64\Debug\LABS(AASD).exe
+﻿
