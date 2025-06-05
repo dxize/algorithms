@@ -1,127 +1,114 @@
+﻿//12.17.Клуб знакомств(5)
+//В студенческом клубе знакомств состоит N человек, которым присвоены номера от 1 до N.При организации клуба каждый представил список своих знакомых.По воскресениям проводятся вечера знакомств, когда знакомые любого студента знакомятся между собой.Выяснить, через сколько воскресений познакомятся два указанных члена клуба.
+//Ввод.В первой строке заданы число членов клуба N(2 ≤ N ≤ 2000) и количество попарных знакомств M.Во второй строке содержатся номера двух студентов.Каждая из следующих M строк, начиная с третьей, описывает знакомство в виде двух номеров студентов.
+//Вывод.Вывести количество воскресений, необходимых для знакомства двух указанных студентов.Если знакомство невозможно, вывести - 1.
+//Примеры
+//Ввод 1       Ввод 2       Ввод 3
+//5 4          3 3          4 2
+//1 5          1 3          4 1
+//1 2          1 2          1 2
+//2 3          2 3          3 4
+//3 4          3 1
+//4 5
+//Вывод 1      Вывод 2      Вывод 3
+//2            0 - 1
+//Пояснение.В примере 1 после первого воскресения познакомятся студенты 1 и 3, поскольку у них имеется общий знакомый 2. Аналогично познакомятся 2 и 4, 3 и 5. Во второе воскресение познакомятся студенты 1 и 5, т.к.у них после первого воскресения есть общий знакомый 3. В примере 2 студенты 1 и 3 уже знакомы.
+//
+//
+//Дмитриев Данил ПС-21
+
+
+
 #include <iostream>
 #include <vector>
 #include <queue>
+#include <set>
 
-const int MAXN = 2005;
-
-// ���� G � �������� ����������, H � ����������� ����
-std::vector<int> G[MAXN], H[MAXN];
-// ������ ��� Union-Find
-int parent[MAXN];
-
-// ������������� ���������
-void make_set(int v) {
-    parent[v] = v;
-}
-
-// ����� ����� ��������� � ������� ����
-int find_set(int v) {
-    if (v == parent[v]) return v;
-    return parent[v] = find_set(parent[v]);
-}
-
-// ����������� ��������
-void union_sets(int a, int b) {
-    a = find_set(a);
-    b = find_set(b);
-    if (a != b) parent[b] = a;
-}
+using namespace std;
 
 int main() {
-    std::ios_base::sync_with_stdio(false);
-    std::cin.tie(nullptr);
-
-    // ���� ������
     int N, M;
-    std::cin >> N >> M;
+    cin >> N >> M;
     int u, v;
-    std::cin >> u >> v;
+    cin >> u >> v;
 
-    // ������������� Union-Find
-    for (int i = 1; i <= N; i++) {
-        make_set(i);
-    }
+    vector<vector<int>> G(N + 1); 
 
-    // ���������� ����� G
-    for (int i = 0; i < M; i++) {
+    for (int i = 0; i < M; ++i) {
         int a, b;
-        std::cin >> a >> b;
+        cin >> a >> b;
         G[a].push_back(b);
         G[b].push_back(a);
-        union_sets(a, b);
     }
 
-    // �������� ���������
-    if (find_set(u) != find_set(v)) {
-        std::cout << -1 << std::endl;
-        return 0;
+    for (int x : G[u]) {
+        if (x == v) {
+            cout << 0 << endl;
+            return 0;
+        }
     }
 
-    // �������� ������ �����
-    bool directly_connected = false;
-    for (int w : G[u]) {
-        if (w == v) {
-            directly_connected = true;
+    vector<bool> visited(N + 1, false);
+    queue<int> q1;
+    q1.push(u);
+    visited[u] = true;
+    bool reachable = false;
+    while (!q1.empty()) {
+        int curr = q1.front(); q1.pop();
+        if (curr == v) {
+            reachable = true;
             break;
         }
+        for (int neighbor : G[curr]) {
+            if (!visited[neighbor]) {
+                visited[neighbor] = true;
+                q1.push(neighbor);
+            }
+        }
     }
-    if (directly_connected) {
-        std::cout << 0 << std::endl;
+    if (!reachable) {
+        cout << -1 << endl;
         return 0;
     }
 
-    // ���������� ����� H
-    // ��������� ���� ����� ����� ������, � ������� ���� ����� ����� � G
-    for (int w = 1; w <= N; w++) {
-        for (int x : G[w]) {
-            for (int y : G[w]) {
-                if (x != y) {
-                    H[x].push_back(y);
+    vector<set<int>> H(N + 1);
+    for (int w = 1; w <= N; ++w) {
+        for (int a : G[w]) {
+            for (int b : G[w]) {
+                if (a != b) {
+                    H[a].insert(b); // знакомятся через w
                 }
             }
         }
     }
-    // ��������� ������������ ���� �� G � H
-    for (int i = 1; i <= N; i++) {
+
+    for (int i = 1; i <= N; ++i) {
         for (int j : G[i]) {
-            H[i].push_back(j);
+            H[i].insert(j);
         }
-    }
-    // ������� ��������� � ������� ��������� H �������
-    for (int i = 1; i <= N; i++) {
-        std::vector<int> temp;
-        for (int j : H[i]) {
-            // ���������� std::find ��� ������ �������� � temp
-            if (std::find(temp.begin(), temp.end(), j) == temp.end()) {
-                temp.push_back(j);
-            }
-        }
-        H[i] = temp;
     }
 
-    // BFS � H, ������� � ������� u
-    std::vector<int> distance(N + 1, -1);
-    std::queue<int> q;
-    for (int w : G[u]) {
-        distance[w] = 0;
-        q.push(w);
+    vector<int> dist(N + 1, -1);
+    queue<int> q;
+    for (int x : G[u]) {
+        dist[x] = 0;
+        q.push(x);
     }
+
     while (!q.empty()) {
-        int w = q.front();
-        q.pop();
-        for (int x : H[w]) {
-            if (distance[x] == -1) {
-                distance[x] = distance[w] + 1;
-                q.push(x);
-                if (x == v) {
-                    std::cout << distance[x] << std::endl;
+        int curr = q.front(); q.pop();
+        for (int neighbor : H[curr]) {
+            if (dist[neighbor] == -1) {
+                dist[neighbor] = dist[curr] + 1;
+                if (neighbor == v) {
+                    cout << dist[neighbor] << endl;
                     return 0;
                 }
+                q.push(neighbor);
             }
         }
     }
 
-    // ���� v �� ��������� (���� ��� �� ������ ���������, ���� ��� � ����� ����������)
-    std::cout << -1 << std::endl;
+    cout << -1 << endl;
     return 0;
 }

@@ -6,7 +6,7 @@
 //Ввод 1          Ввод 2
 //14 3 5          15 2 1
 //Вывод 1         Вывод 2
-//1
+//1               2
 //
 //Дмитриев Данил ПС-21
 
@@ -15,10 +15,12 @@
 
 using namespace std;
 
-bool canWin(int matches, int take1, int take2) {
+bool canWin(int matches, int take1, int take2) 
+{
     vector<bool> result(matches + 1, false);
 
-    for (int i = 1; i <= matches; ++i) {
+    for (int i = 1; i <= matches; ++i) 
+    {
         bool option1 = (i >= take1) ? !result[i - take1] : false;
         bool option2 = (i >= take2) ? !result[i - take2] : false;
         result[i] = option1 || option2;
@@ -27,7 +29,8 @@ bool canWin(int matches, int take1, int take2) {
     return result[matches];
 }
 
-int main() {
+int main() 
+{
     ifstream input("input_15_2.txt");
     ofstream output("output_15_2.txt");
 

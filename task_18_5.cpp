@@ -51,7 +51,6 @@ struct MinHeap {
 };
 
 int main() {
-    // Открываем файлы
     ifstream fin("input_18_5.txt");
     ofstream fout("output_18_5.txt");
 
